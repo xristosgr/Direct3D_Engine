@@ -919,10 +919,6 @@ void HeightfieldTerrain::DeleteHeightfield()
 	}
 }
 
-btRigidBody* HeightfieldTerrain::createCollision(btDiscreteDynamicsWorld* dynamicWorld, btAlignedObjectArray<btCollisionShape*>& collisionShapes, btAlignedObjectArray<bulletObject*>& bodies)
-{
-	return nullptr;
-}
 
 bool HeightfieldTerrain::LoadData()
 {
