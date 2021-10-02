@@ -11,19 +11,11 @@
 #include "Vertex.h"
 #include "TerrainCellClass.h"
 #include "FrustumClass.h"
-#include <bullet/btBulletDynamicsCommon.h>
-#include <bullet/BulletCollision/CollisionShapes/btShapeHull.h>
 
 class HeightfieldTerrain
 {
 private:
-	struct bulletObject
-	{
-		int id;
-		bool hit;
-		btRigidBody* body;
-		bulletObject(btRigidBody* b, int i) : body(b), id(i), hit(false) {};
-	};
+
 
 	struct HeightMapType
 	{
@@ -91,7 +83,6 @@ private:
 	
 	void DeleteHeightfield();
 
-	btRigidBody* createCollision(btDiscreteDynamicsWorld* dynamicWorld, btAlignedObjectArray<btCollisionShape*>& collisionShapes, btAlignedObjectArray<bulletObject*>& bodies);
 
 public:
 
@@ -229,7 +220,6 @@ private:
 
 
 	private:
-			btDefaultMotionState* motion;
 
 			bool deleteCells = false;
 };

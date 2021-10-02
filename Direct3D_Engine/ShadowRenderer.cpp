@@ -1,4 +1,5 @@
 #include"ShadowRenderer.h"
+#include <PxPhysicsAPI.h>
 
 void ShadowRenderer::RenderShadowObjects(XMMATRIX& viewMatrix, XMMATRIX& ProjectionMatrix, VertexShader& vertexShader, PixelShader& pixelShader,bool frustum)
 {
@@ -35,9 +36,10 @@ void ShadowRenderer::DrawShadowObject(GameObject& gameObject, Camera& camera, XM
 		{
 			XMFLOAT3 diff = XMFLOAT3(camera.GetPositionFloat3().x - gameObject.pos.x, camera.GetPositionFloat3().y - gameObject.pos.y, camera.GetPositionFloat3().z - gameObject.pos.z);
 
-			btVector3 diffVec = btVector3(diff.x, diff.y, diff.z);
+			
+			physx::PxVec3 diffVec = physx::PxVec3(diff.x, diff.y, diff.z);
 
-			float dist = btDot(diffVec, diffVec);
+			float dist = diffVec.dot(diffVec);
 
 			//OutputDebugStringA(("DIST = " + std::to_string(dist) + "\n").c_str());
 			if (dist < shadowCullingRadius)
