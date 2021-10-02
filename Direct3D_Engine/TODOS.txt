@@ -1,0 +1,58 @@
+//TODO: Add muiltiple mesh support in gameObjects class
+
+
+
+
+-AI:
+	-AI Logic
+		-A* pathfinding
+		-follow player
+		-rotate to face player
+		-fire at player
+		-perception components(sight, hearing)
+		-Behavior Trees
+		-Graphical debuger
+
+-Particle System
+	-Static particles
+	-Dynamic particles
+	-Physics based particles
+	-Animated particles
+
+
+-GUI:
+	-Fix Gui visualization
+	-Better grouping
+
+
+-Sound:
+	-3D sound
+
+-Model:
+	-Better model Loader
+	-DynamicTextures
+	-Dynamic Materials
+
+-Animation:
+	-Skeleton visualization
+	-Bone snapping
+	-Bone sockets
+	-Root motion
+
+
+-Editor:
+	-Fix editor workflow
+	-Objects Folders
+	-Different windows for various tasks
+
+-Node System:
+	-Graphical coding(c++,hlsl,lua)
+	-Node system
+
+-Scripting:
+	-Implement lua wrapper
+
+
+-Physics system:
+	-Add concave shapes support
+	-Add compound shapes support

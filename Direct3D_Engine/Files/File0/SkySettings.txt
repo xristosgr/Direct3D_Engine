@@ -1,0 +1,11 @@
+probeMapPosX= -10.335
+probeMapPosY= 0.755
+probeMapPosZ= 0.875
+centerColorX= 0.845
+centerColorY= 0.23
+centerColorZ= 0.055
+centerColorW= 1
+apexColorX= 0.92
+apexColorY= 0.13
+apexColorZ= 0.045
+apexColorW= 1

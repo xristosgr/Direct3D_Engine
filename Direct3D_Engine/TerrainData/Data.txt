@@ -1,0 +1,6 @@
+Terrain Filename: Data/Heightmaps/Height129.r16
+Terrain Height: 129
+Terrain Width: 129
+Terrain Scaling: 5000
+Color Map Filename: Data/Colormaps/colormap.bmp
+
