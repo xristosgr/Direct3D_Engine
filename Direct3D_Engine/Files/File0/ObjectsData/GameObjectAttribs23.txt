@@ -42,5 +42,5 @@ IsTextured= 1
 isEmptyTarget= 0
 isObjectDeleted= 0
 AnimCount= 1
-AnimFiles0= C:/GameEngine/Direct3D11_Engine-main/Direct3D_Engine/Data/Objects/battleDemo/Character/Run.gltf
+AnimFiles0= .//Data/Objects/battleDemo/Character/Run.gltf
 Name= GameObject23

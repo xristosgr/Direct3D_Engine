@@ -14,8 +14,9 @@
 #include "ModelViewer.h"
 #include "UIClass.h"
 #include "NavMeshClass.h"
+#include "PostProccessing.h"
 
-class Graphics : public ShadowRenderer, public SaveSystem
+class Graphics : public ShadowRenderer, public SaveSystem, public PostProccessing
 {
 public:
 
@@ -51,11 +52,11 @@ private:
 	void UpdateShaders(std::vector<PointLight>& pointLights, Camera& camera);
 
 	void RenderSceneToTexture(float& dt, std::vector<GameObject*>& gameObjects, std::vector<PointLight>& pointLights, Camera& camera);
-	void BrdfRender(Camera& camera, RenderTexture& texture, VertexShader& vertexshader, PixelShader& pixelShader);
+	//void BrdfRender(Camera& camera, RenderTexture& texture, VertexShader& vertexshader, PixelShader& pixelShader);
 
 	void cubeMapRender(std::vector<GameObject*>& gameObjects, Camera& camera, RenderTexture& currentView, int& index, VertexShader& vertexshader, PixelShader& pixelShader);
-	void IrradianceConvolutionRender(Camera& camera, RenderTexture& currentView, int& index, VertexShader& vertexshader, PixelShader& pixelShader);
-	void bloomEffect(Camera& camera, RenderTexture& texture, VertexShader& vertexshader, PixelShader& pixelShader);
+	//void IrradianceConvolutionRender(Camera& camera, RenderTexture& currentView, int& index, VertexShader& vertexshader, PixelShader& pixelShader);
+	//void bloomEffect(Camera& camera, RenderTexture& texture, VertexShader& vertexshader, PixelShader& pixelShader);
 
 	void ForwardRendering(float& dt, std::vector<GameObject*>& gameObjects, std::vector<PointLight>& pointLights, Camera& camera);
 	void InitTestScene(Camera& camera);
