@@ -91,7 +91,12 @@ void SaveSystem::SaveGeneralSettings(std::vector<GameObject*>& gameObjects, std:
 
 		for (int i = 0; i < gameObjects.size(); i++)
 		{
-			outfile << "GameObject" + std::to_string(i) + ".FilePath= " << gameObjects[i]->filePath << "\n";
+			std::string _path;
+		
+			size_t npos = gameObjects[i]->filePath.find("Data");
+			_path = gameObjects[i]->filePath.substr(npos);
+			
+			outfile << "GameObject" + std::to_string(i) + ".FilePath= " << ".//" << _path << "\n";
 		}
 	}
 
@@ -475,7 +480,12 @@ void SaveSystem::SaveGameObjectsData(std::vector<GameObject*>& gameObjects, std:
 
 				for (int j = 0; j < gameObjects[i]->AnimFiles.size(); ++j)
 				{
-					outfile << "AnimFiles" + std::to_string(j) + "= " << gameObjects[i]->AnimFiles[j] << "\n";
+					std::string _path;
+
+					size_t npos = gameObjects[i]->AnimFiles[j].find("Data");
+					_path = gameObjects[i]->AnimFiles[j].substr(npos);
+
+					outfile << "AnimFiles" + std::to_string(j) + "= "<< ".//" << _path << "\n";
 				}
 				outfile << "Name= " << gameObjects[i]->objectName.data() << "\n";
 

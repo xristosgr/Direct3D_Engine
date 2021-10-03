@@ -1,290 +1,162 @@
 #include "PostProccessing.h"
 
-//void PostProccessing::RenderSceneToTexture()
-//{
-//
-//	sceneTexture.SetRenderTarget(deviceContext.Get(), sceneTexture.m_depthStencilView);
-//	sceneTexture.ClearRenderTarget(deviceContext.Get(), sceneTexture.m_depthStencilView, rgb[0], rgb[1], rgb[2], rgb[3]);
-//
-//
-//
-//	deviceContext->OMSetDepthStencilState(depthStencilState.Get(), 0);
-//	this->deviceContext->OMSetBlendState(NULL, NULL, 0xFFFFFFFF);
-//
-//
-//	XMMATRIX viewMatrix = camera.GetViewMatrix();
-//	XMMATRIX projectionMatrix = camera.GetProjectionMatrix();
-//
-//
-//	deviceContext->PSSetShaderResources(4, 1, &irradianceConvCubeMap.shaderResourceView);
-//	deviceContext->PSSetShaderResources(5, 1, &brdfTexture.shaderResourceView);
-//	deviceContext->PSSetShaderResources(6, 1, &prefilterCubeMap[0].shaderResourceView);
-//	deviceContext->PSSetShaderResources(7, 1, &prefilterCubeMap[1].shaderResourceView);
-//	deviceContext->PSSetShaderResources(8, 1, &prefilterCubeMap[2].shaderResourceView);
-//	deviceContext->PSSetShaderResources(9, 1, &prefilterCubeMap[3].shaderResourceView);
-//	deviceContext->PSSetShaderResources(10, 1, &prefilterCubeMap[4].shaderResourceView);
-//	deviceContext->PSSetShaderResources(11, 1, &BloomVerticalBlurTexture.shaderResourceView);
-//	std::vector< ID3D11ShaderResourceView*> ShadowTextures;
-//	ShadowTextures.resize(shadowMap.size());
-//	int index = 0;
-//	for (int j = 0; j < shadowMap.size(); ++j)
-//	{
-//
-//		ShadowTextures[index] = shadowMap[j].shaderResourceView;
-//		index++;
-//
-//
-//
-//	}
-//
-//	deviceContext->PSSetShaderResources(12, pointLights.size(), ShadowTextures.data());
-//
-//	RenderObjects(viewMatrix, projectionMatrix, SoftShadowsVS, pbrPS);
-//
-//
-//	for (int i = 0; i < gameObjects.size(); ++i)
-//	{
-//		if (!gameObjects[i]->model.deleted)
-//		{
-//
-//			if (!gameObjects[i]->isTransparent)
-//			{
-//
-//				this->deviceContext->OMSetBlendState(NoBlendState.Get(), NULL, 0xFFFFFFFF);
-//				if (gameObjects[i]->model.isAnimated)
-//				{
-//					RenderObjects(viewMatrix, projectionMatrix, AnimatedVS, pbrPS);
-//
-//
-//					if (gameObjects[i]->attachToCamera)
-//					{
-//						RenderObjects(viewMatrix, projectionMatrix, FPSanimatedVS, pbrPS);
-//					}
-//				}
-//				else
-//				{
-//					if (gameObjects[i]->attachToCamera)
-//					{
-//						RenderObjects(viewMatrix, projectionMatrix, FPScameraVS, pbrPS);
-//					}
-//					else
-//					{
-//						RenderObjects(viewMatrix, projectionMatrix, SoftShadowsVS, pbrPS);
-//					}
-//				}
-//
-//
-//
-//				if (!gameObjects[i]->isTextured)
-//				{
-//					this->deviceContext->PSSetShaderResources(0, 1, noTextureAlbedo.GetTextureResourceViewAddress());
-//					this->deviceContext->PSSetShaderResources(1, 1, noTextureNormal.GetTextureResourceViewAddress());
-//					this->deviceContext->PSSetShaderResources(2, 1, noTextureRoughness.GetTextureResourceViewAddress());
-//					this->deviceContext->PSSetShaderResources(3, 1, noTextureMetallic.GetTextureResourceViewAddress());
-//				}
-//
-//				if (gameObjects[i]->isPlayer || gameObjects[i]->attachToCamera)
-//				{
-//					if (camera.PossessCharacter)
-//					{
-//						DrawObject(*gameObjects[i], projectionMatrix, viewMatrix, frustums[i], gameObjects[i]->frustumEnable, true, 1, 1, 1, 3000);
-//					}
-//
-//				}
-//				else
-//				{
-//					DrawObject(*gameObjects[i], projectionMatrix, viewMatrix, frustums[i], gameObjects[i]->frustumEnable, true, 1, 1, 1, 3000);
-//				}
-//			}
-//
-//		}
-//	}
-//
-//
-//	RenderObjects(viewMatrix, projectionMatrix, SkyVS, SkyPS);
-//	cb_ps_sky.data.apexColor = apexColor;
-//	cb_ps_sky.data.centerColor = centerColor;
-//	this->cb_ps_sky.UpdateBuffer();
-//	this->deviceContext->RSSetState(this->rasterizerStateFront.Get());
-//	this->deviceContext->VSSetShader(SkyVS.GetShader(), NULL, 0);
-//	this->deviceContext->PSSetShader(SkyPS.GetShader(), NULL, 0);
-//	skydomeObject.scale = XMFLOAT3(500, 500, 500);
-//	skydomeObject.SetTranslation(camera.GetPositionFloat3());
-//	skydomeObject.Draw(viewMatrix, projectionMatrix, false);
-//
-//
-//	this->deviceContext->RSSetState(this->rasterizerState.Get());
-//
-//	this->deviceContext->OMSetBlendState(NoBlendState.Get(), NULL, 0xFFFFFFFF);
-//
-//	RenderObjects(viewMatrix, projectionMatrix, vertexshader, lightPS);
-//	for (int i = 0; i < pointLights.size(); ++i)
-//	{
-//		//if (lightNames[listbox_light_current] == pointLights[i].lightname)
-//		//{
-//			//if(pointLights[i].bRenderModel && pointLights[i].model.vertices.size()>0)
-//		pointLights[i].Draw(camera.GetViewMatrix(), camera.GetProjectionMatrix());
-//		//}
-//	}
-//
-//	for (int i = 0; i < gameObjects.size(); ++i)
-//	{
-//		if (!gameObjects[i]->model.deleted)
-//		{
-//
-//			if (gameObjects[i]->isTransparent)
-//			{
-//
-//				this->deviceContext->OMSetBlendState(blendState.Get(), NULL, 0xFFFFFFFF);
-//				if (gameObjects[i]->model.isAnimated)
-//				{
-//					RenderObjects(viewMatrix, projectionMatrix, AnimatedVS, transparentPbrPS);
-//					if (gameObjects[i]->attachToCamera)
-//					{
-//						RenderObjects(viewMatrix, projectionMatrix, FPSanimatedVS, transparentPbrPS);
-//					}
-//				}
-//				else
-//				{
-//					if (gameObjects[i]->attachToCamera)
-//					{
-//						RenderObjects(viewMatrix, projectionMatrix, FPScameraVS, transparentPbrPS);
-//					}
-//					else
-//					{
-//						RenderObjects(viewMatrix, projectionMatrix, SoftShadowsVS, transparentPbrPS);
-//					}
-//
-//				}
-//
-//				if (!gameObjects[i]->isTextured)
-//				{
-//					this->deviceContext->PSSetShaderResources(0, 1, noTextureAlbedo.GetTextureResourceViewAddress());
-//					this->deviceContext->PSSetShaderResources(1, 1, noTextureNormal.GetTextureResourceViewAddress());
-//					this->deviceContext->PSSetShaderResources(2, 1, noTextureRoughness.GetTextureResourceViewAddress());
-//					this->deviceContext->PSSetShaderResources(3, 1, noTextureMetallic.GetTextureResourceViewAddress());
-//				}
-//
-//				if (gameObjects[i]->isPlayer || gameObjects[i]->attachToCamera)
-//				{
-//					if (camera.PossessCharacter)
-//					{
-//						DrawObject(*gameObjects[i], projectionMatrix, viewMatrix, frustums[i], gameObjects[i]->frustumEnable, true, 1, 1, 1, 3000);
-//					}
-//
-//				}
-//				else
-//				{
-//					DrawObject(*gameObjects[i], projectionMatrix, viewMatrix, frustums[i], gameObjects[i]->frustumEnable, true, 1, 1, 1, 3000);
-//				}
-//			}
-//
-//		}
-//
-//
-//	}
-//
-//	this->deviceContext->OMSetBlendState(NoBlendState.Get(), NULL, 0xFFFFFFFF);
-//
-//
-//
-//
-//
-//	this->deviceContext->OMSetBlendState(AdditiveBlendState.Get(), NULL, 0xFFFFFFFF);
-//
-//	//if (camera.PossessCharacter)
-//	//{
-//
-//	if (muzzleFlash.particle.attachToCamera)
-//	{
-//		RenderObjects(viewMatrix, projectionMatrix, FPScameraVS, ParticlePS);
-//		this->deviceContext->VSSetShader(this->FPScameraVS.GetShader(), NULL, 0);
-//		this->deviceContext->PSSetShader(this->ParticlePS.GetShader(), NULL, 0);
-//	}
-//	else
-//	{
-//		RenderObjects(viewMatrix, projectionMatrix, vertexshader, ParticlePS);
-//		this->deviceContext->VSSetShader(this->vertexshader.GetShader(), NULL, 0);
-//		this->deviceContext->PSSetShader(this->ParticlePS.GetShader(), NULL, 0);
-//	}
-//	muzzleFlash.particle.attachToCamera = true;
-//	muzzleFlash.particle.scale = XMFLOAT3(0.1, 0.2, 0.2);
-//	muzzleFlash.particle.rot = XMFLOAT3(0.0, 1.550, 0.0);
-//	muzzleFlash.particle.pos = XMFLOAT3(0.145, -0.110f, 0.430);
-//	muzzleFlash.particle.frustumEnable = false;
-//	for (int j = 0; j < gameObjects.size(); ++j)
-//	{
-//		if (gameObjects[j]->isFiring)
-//		{
-//			deviceContext->PSSetShaderResources(0, 1, muzzleFlash.texture.GetTextureResourceViewAddress());
-//			muzzleFlash.Draw(viewMatrix, projectionMatrix, true);
-//
-//		}
-//	}
-//
-//	//		this->deviceContext->OMSetBlendState(blendState.Get(), NULL, 0xFFFFFFFF);
-//	//		if (crosshair.particle.attachToCamera)
-//	//		{
-//	//			RenderObjects(viewMatrix, projectionMatrix, FPScameraVS, ParticlePS);
-//	//			this->deviceContext->VSSetShader(this->FPScameraVS.GetShader(), NULL, 0);
-//	//			this->deviceContext->PSSetShader(this->ParticlePS.GetShader(), NULL, 0);
-//	//		}
-//	//		else
-//	//		{
-//	//			RenderObjects(viewMatrix, projectionMatrix, vertexshader, ParticlePS);
-//	//			this->deviceContext->VSSetShader(this->vertexshader.GetShader(), NULL, 0);
-//	//			this->deviceContext->PSSetShader(this->ParticlePS.GetShader(), NULL, 0);
-//	//		}
-//	//
-//	//
-//	//
-//	//
-//	//		deviceContext->PSSetShaderResources(0, 1, crosshair.texture.GetTextureResourceViewAddress());
-//	//
-//	//		crosshair.particle.attachToCamera = true;
-//	//		crosshair.particle.scale = XMFLOAT3(0.005, 0.005, 0.005);
-//	//		crosshair.particle.rot = XMFLOAT3(0.0, 1.550, 0.0);
-//	//		crosshair.particle.pos = XMFLOAT3(0.0, 0.0f, 0.110);
-//	//		crosshair.particle.frustumEnable = false;
-//	//		if (camera.PossessCharacter)
-//	//			crosshair.Draw(viewMatrix, projectionMatrix, true);
-//
-//		//}
-//
-//	this->deviceContext->OMSetBlendState(NoBlendState.Get(), NULL, 0xFFFFFFFF);
-//}
-//
-//void PostProccessing::bloomEffect()
-//{
-//
-//	this->deviceContext->OMSetBlendState(NoBlendState.Get(), NULL, 0xFFFFFFFF);
-//	bloomRenderTexture.SetRenderTarget(deviceContext.Get(), bloomRenderTexture.m_depthStencilView);
-//	bloomRenderTexture.ClearRenderTarget(deviceContext.Get(), bloomRenderTexture.m_depthStencilView, 0, 0, 0, 1.0f);
-//
-//	XMMATRIX viewMatrix = camera.GetViewMatrix();
-//	XMMATRIX projectionMatrix = camera.GetProjectionMatrix();
-//
-//	//ForwardRendering();
-//	RenderObjects(viewMatrix, projectionMatrix, this->vertexshader, BloomLightPS);
-//	this->deviceContext->VSSetShader(this->vertexshader.GetShader(), NULL, 0);
-//	this->deviceContext->PSSetShader(this->BloomLightPS.GetShader(), NULL, 0);
-//	this->deviceContext->PSSetShaderResources(0, 1, &sceneTexture.shaderResourceView);
-//	rect.Draw(camera, depthStencilState2D.Get(), ViewMatrix2D, camera.GetProjectionMatrix(), windowWidth, windowHeight);
-//
-//
-//
-//
-//	RenderObjects(viewMatrix, projectionMatrix, verticalBlurVS, verticalBlurPS);
-//	BloomVerticalBlurTexture.SetRenderTarget(deviceContext.Get(), BloomVerticalBlurTexture.m_depthStencilView);
-//	BloomVerticalBlurTexture.ClearRenderTarget(deviceContext.Get(), BloomVerticalBlurTexture.m_depthStencilView, 0, 0, 0, 1.0f);
-//
-//	this->deviceContext->PSSetShaderResources(0, 1, &bloomRenderTexture.shaderResourceView);
-//	rect.Draw(camera, depthStencilState2D.Get(), ViewMatrix2D, camera.GetProjectionMatrix(), windowWidth, windowHeight);
-//
-//	RenderObjects(viewMatrix, projectionMatrix, horizontalBlurVS, horizontalBlurPS);
-//	bloomRenderTexture.SetRenderTarget(deviceContext.Get(), bloomRenderTexture.m_depthStencilView);
-//	bloomRenderTexture.ClearRenderTarget(deviceContext.Get(), bloomRenderTexture.m_depthStencilView, 0, 0, 0, 1.0f);
-//
-//	this->deviceContext->PSSetShaderResources(0, 1, &BloomVerticalBlurTexture.shaderResourceView);
-//	rect.Draw(camera, depthStencilState2D.Get(), ViewMatrix2D, camera.GetProjectionMatrix(), windowWidth, windowHeight);
-//}
+
+void PostProccessing::BrdfRender(Camera& camera, RenderTexture& texture, VertexShader& vertexshader, PixelShader& pixelShader)
+{
+	texture.SetRenderTarget(deviceContext.Get(), texture.m_depthStencilView);
+
+	texture.ClearRenderTarget(deviceContext.Get(), texture.m_depthStencilView, 1, 1, 1, 1);
+
+
+	XMMATRIX viewMatrix = ViewMatrix2D;
+	XMMATRIX projectionMatrix = camera.GetProjectionMatrix();
+
+
+	RenderObjects(viewMatrix, projectionMatrix, vertexshader, pixelShader);
+
+
+	this->deviceContext->RSSetState(this->rasterizerState.Get());
+
+
+	this->deviceContext->PSSetShaderResources(0, 1, &environmentCubeMap.shaderResourceView);
+	fullScreenWidow.Draw(camera, depthStencilState2D.Get(), ViewMatrix2D, camera.GetProjectionMatrix(), windowWidth, windowHeight);
+}
+
+void PostProccessing::IrradianceConvolutionRender(Camera& camera, RenderTexture& currentView, int& index, VertexShader& vertexshader, PixelShader& pixelShader)
+{
+
+	currentView.SetRenderTarget(deviceContext.Get(), currentView.m_depthStencilView);
+
+	currentView.ClearRenderTarget(deviceContext.Get(), currentView.m_depthStencilView, rgb[0], rgb[1], rgb[2], rgb[3]);
+
+	XMMATRIX viewMatrix = irradianceProbeMap.camera[index].GetViewMatrix();
+	XMMATRIX projectionMatrix = irradianceProbeMap.camera[index].GetProjectionMatrix();
+
+
+	cb_ps_sky.data.apexColor = apexColor;
+	cb_ps_sky.data.centerColor = centerColor;
+	this->cb_ps_sky.UpdateBuffer();
+
+
+
+
+	this->deviceContext->RSSetState(this->rasterizerState.Get());
+	RenderObjects(viewMatrix, projectionMatrix, vertexshader, pixelShader);
+
+
+	this->deviceContext->RSSetState(this->rasterizerState.Get());
+
+
+	this->deviceContext->RSSetState(this->rasterizerStateFront.Get());
+	cubeShape.scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
+
+
+	this->deviceContext->PSSetShaderResources(0, 1, &environmentCubeMap.shaderResourceView);
+	cubeShapePBR.DrawObject(camera, viewMatrix, projectionMatrix, false, true);
+
+	this->deviceContext->RSSetState(this->rasterizerState.Get());
+}
+
+void PostProccessing::bloomEffect(Camera& camera, RenderTexture& texture, VertexShader& vertexshader, PixelShader& pixelShader)
+{
+	deviceContext->RSSetViewports(1, &this->viewport);
+	this->deviceContext->OMSetRenderTargets(1, this->renderTargetView.GetAddressOf(), this->depthStencilView.Get());
+	camera.PerspectiveFov(fov, static_cast<float>(windowWidth / windowHeight) * 2, 0.1f, 10000.0f);
+	this->deviceContext->ClearRenderTargetView(this->renderTargetView.Get(), rgb);
+	this->deviceContext->ClearDepthStencilView(this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+
+	this->deviceContext->OMSetBlendState(NoBlendState.Get(), NULL, 0xFFFFFFFF);
+	texture.SetRenderTarget(deviceContext.Get(), texture.m_depthStencilView);
+	texture.ClearRenderTarget(deviceContext.Get(), texture.m_depthStencilView, 0, 0, 0, 1.0f);
+
+	XMMATRIX viewMatrix = camera.GetViewMatrix();
+	XMMATRIX projectionMatrix = camera.GetProjectionMatrix();
+
+	//ForwardRendering();
+	RenderObjects(viewMatrix, projectionMatrix, this->vertexshader, BloomLightPS);
+	this->deviceContext->VSSetShader(this->vertexshader.GetShader(), NULL, 0);
+	this->deviceContext->PSSetShader(this->BloomLightPS.GetShader(), NULL, 0);
+	this->deviceContext->PSSetShaderResources(0, 1, &sceneTexture.shaderResourceView);
+
+	fullScreenWidow.Draw(camera, depthStencilState2D.Get(), ViewMatrix2D, camera.GetProjectionMatrix(), windowWidth, windowHeight);
+
+
+
+	deviceContext->RSSetViewports(1, &this->viewport);
+	this->deviceContext->OMSetRenderTargets(1, this->renderTargetView.GetAddressOf(), this->depthStencilView.Get());
+	camera.PerspectiveFov(fov, static_cast<float>(windowWidth / windowHeight) * 2, 0.1f, 10000.0f);
+	this->deviceContext->ClearRenderTargetView(this->renderTargetView.Get(), rgb);
+	this->deviceContext->ClearDepthStencilView(this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+
+	camera.PerspectiveFov(fov, static_cast<float>((windowWidth) / (windowHeight)) * 2, 0.1f, 10000.0f);
+
+	viewMatrix = camera.GetViewMatrix();
+	projectionMatrix = camera.GetProjectionMatrix();
+
+
+	RenderObjects(viewMatrix, projectionMatrix, verticalBlurVS, verticalBlurPS);
+	deviceContext->RSSetViewports(1, &BloomVerticalBlurTexture.m_viewport);
+
+	BloomVerticalBlurTexture.SetRenderTarget(deviceContext.Get(), BloomVerticalBlurTexture.m_depthStencilView);
+	BloomVerticalBlurTexture.ClearRenderTarget(deviceContext.Get(), BloomVerticalBlurTexture.m_depthStencilView, 0, 0, 0, 1.0f);
+
+	camera.PerspectiveFov(fov, static_cast<float>(windowWidth / windowHeight) * 2, 0.1f, 10000.0f);
+
+	this->deviceContext->PSSetShaderResources(0, 1, &bloomRenderTexture.shaderResourceView);
+	rect.Draw(camera, depthStencilState2D.Get(), ViewMatrix2DHalf, camera.GetProjectionMatrix(), windowWidth, windowHeight);
+
+
+
+
+	deviceContext->RSSetViewports(1, &this->viewport);
+	this->deviceContext->OMSetRenderTargets(1, this->renderTargetView.GetAddressOf(), this->depthStencilView.Get());
+	camera.PerspectiveFov(fov, static_cast<float>(windowWidth / windowHeight) * 2, 0.1f, 10000.0f);
+	this->deviceContext->ClearRenderTargetView(this->renderTargetView.Get(), rgb);
+	this->deviceContext->ClearDepthStencilView(this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+
+
+	deviceContext->RSSetViewports(1, &BloomHorizontalBlurTexture.m_viewport);
+	RenderObjects(viewMatrix, projectionMatrix, horizontalBlurVS, horizontalBlurPS);
+	BloomHorizontalBlurTexture.SetRenderTarget(deviceContext.Get(), BloomHorizontalBlurTexture.m_depthStencilView);
+	BloomHorizontalBlurTexture.ClearRenderTarget(deviceContext.Get(), BloomHorizontalBlurTexture.m_depthStencilView, 0, 0, 0, 1.0f);
+	this->deviceContext->PSSetShaderResources(0, 1, &BloomVerticalBlurTexture.shaderResourceView);
+	rect.Draw(camera, depthStencilState2D.Get(), ViewMatrix2DHalf, camera.GetProjectionMatrix(), windowWidth, windowHeight);
+
+
+	deviceContext->RSSetViewports(1, &this->viewport);
+	this->deviceContext->OMSetRenderTargets(1, this->renderTargetView.GetAddressOf(), this->depthStencilView.Get());
+	camera.PerspectiveFov(fov, static_cast<float>(windowWidth / windowHeight) * 2, 0.1f, 10000.0f);
+	this->deviceContext->ClearRenderTargetView(this->renderTargetView.Get(), rgb);
+	this->deviceContext->ClearDepthStencilView(this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	cb_vs_vertexshader.data.viewMatrix = viewMatrix;
+	cb_vs_vertexshader.data.projectionMatrix = projectionMatrix;
+	cb_vs_vertexshader.UpdateBuffer();
+
+	texture.SetRenderTarget(deviceContext.Get(), texture.m_depthStencilView);
+	RenderObjects(viewMatrix, projectionMatrix, this->vertexshader, pixelshader_noLight);
+	this->deviceContext->VSSetShader(this->vertexshader.GetShader(), NULL, 0);
+	this->deviceContext->PSSetShader(this->pixelshader_noLight.GetShader(), NULL, 0);
+	texture.ClearRenderTarget(deviceContext.Get(), texture.m_depthStencilView, 0, 0, 0, 1.0f);
+	this->deviceContext->PSSetShaderResources(0, 1, &BloomHorizontalBlurTexture.shaderResourceView);
+	fullScreenWidow.Draw(camera, depthStencilState2D.Get(), ViewMatrix2D, camera.GetProjectionMatrix(), windowWidth, windowHeight);
+}
+
+void PostProccessing::RenderObjects(XMMATRIX& viewMatrix, XMMATRIX& ProjectionMatrix, VertexShader& vertexShader, PixelShader& pixelShader)
+{
+
+	this->deviceContext->IASetInputLayout(vertexShader.GetInputLayout());
+	this->deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	this->deviceContext->RSSetState(this->rasterizerState.Get());
+	this->deviceContext->OMSetDepthStencilState(this->depthStencilState.Get(), 0);
+
+	this->deviceContext->PSSetSamplers(0, 1, this->samplerState_Clamp.GetAddressOf());
+	this->deviceContext->PSSetSamplers(1, 1, this->samplerState_Wrap.GetAddressOf());
+	this->deviceContext->PSSetSamplers(2, 1, this->samplerState_ssao.GetAddressOf());
+	this->deviceContext->VSSetShader(vertexShader.GetShader(), NULL, 0);
+	this->deviceContext->PSSetShader(pixelShader.GetShader(), NULL, 0);
+}

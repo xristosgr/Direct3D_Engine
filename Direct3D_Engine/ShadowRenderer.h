@@ -1,7 +1,7 @@
 #pragma once
 #include "GraphicsVariables.h"
 
-class ShadowRenderer: public GraphicsVariables
+class ShadowRenderer: virtual public GraphicsVariables
 {
 protected:
 	void RenderToTexture(std::vector<GameObject*>& gameObjects, Camera& camera, RenderTexture& shadowMap, PointLight& light, VertexShader& vertexshader, PixelShader& pixelShader,int index);
